@@ -1,0 +1,18 @@
+@import './base.scss';
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app {
+  width: 90%;
+}
+
+$colors: (
+  black: #282828,
+  white: #f2ecff,
+  green: #00c896,
+  gray: #555555
+);
