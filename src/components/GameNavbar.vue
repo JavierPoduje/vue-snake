@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <GameButton text="Start" :onClick="gameStore?.startGame" />
+    <GameButton text="Start" :on-click="gameStore?.startGame" />
   </nav>
 </template>
 

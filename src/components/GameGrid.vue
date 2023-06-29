@@ -6,13 +6,24 @@
         :key="`${rowIdx}-${colIdx}`"
         class="grid__cell_container"
       >
-        <div class="cell" />
+        <div
+          class="cell"
+          :class="snakeSet.has(`${colIdx}-${rowIdx}`) && 'cell--snake'"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
+  import { computed } from 'vue'
+  import useGameStore from '../stores/game.ts'
+
+  const gameStore = useGameStore()
+  const snakeSet = computed(
+    () => new Set(gameStore?.snake?.map(({ col, row }) => `${col}-${row}`))
+  )
+
   const numberOfColumns = 25
   const grid = new Array(numberOfColumns)
     .fill()
@@ -43,6 +54,10 @@
       background-color: map-get($colors, green);
       height: $cell-size;
       width: $cell-size;
+
+      &--snake {
+        background-color: map-get($colors, red);
+      }
     }
   }
 </style>

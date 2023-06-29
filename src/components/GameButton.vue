@@ -3,7 +3,16 @@
 </template>
 
 <script setup>
-  const props = defineProps(['text', 'onClick'])
+  const props = defineProps({
+    text: {
+      type: String,
+      required: true
+    },
+    onClick: {
+      type: Function,
+      required: true
+    }
+  })
 </script>
 
 <style scoped lang="scss">

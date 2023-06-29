@@ -3,7 +3,10 @@ import { defineStore } from 'pinia'
 
 const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
   state: () => ({
-    snake: [],
+    snake: [
+      { row: 0, col: 0 },
+      { row: 1, col: 1 }
+    ],
     game: {
       state: GameState.Pending
     }
@@ -26,7 +29,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     },
     finishGame() {
       this.game.state = GameState.Over
-    }
+    },
   }
 })
 
