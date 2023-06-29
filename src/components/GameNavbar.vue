@@ -1,11 +1,12 @@
 <template>
   <nav class="navbar">
-    <button @click="gameStore.startGame">Start</button>
+    <GameButton text="Start" :onClick="gameStore?.startGame" />
   </nav>
 </template>
 
 <script setup>
   import useGameStore from '../stores/game.ts'
+  import GameButton from './GameButton.vue'
 
   const gameStore = useGameStore()
 </script>
