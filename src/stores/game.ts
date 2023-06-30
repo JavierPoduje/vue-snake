@@ -33,21 +33,20 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
       this.snake.direction = direction
     },
     tick() {
-      // 1. calculate the next position of the snake
+      // get the next body of the snake
       const nextSnake = getNextSnake(this.game, this.snake)
 
-      // 2. check if the snake died
       if (isClashedSnake(nextSnake)) {
+        // if the snake died, finish the game
         return this.finishGame()
       }
 
-      // 3. if snake ate apple, add a cell to the snake and generate a new apple
       if (snakeAteApple(nextSnake[0], this.apple)) {
+        // if snake ate apple, add a cell to the snake and generate a new apple
         this.addCellToSnake(this.apple, nextSnake)
         this.apple = getRandomApple(this.snake.body, this.game.gridSize)
-      }
-      // 4. else, just move the snake
-      else {
+      } else {
+        // otherwise, just move the snake
         this.snake.body = nextSnake
       }
     },
@@ -57,7 +56,6 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     pauseGame() {
       this.game.state = GameState.Pending
     },
-    // Todo: not implemented
     finishGame() {
       this.game.state = GameState.Over
     }
