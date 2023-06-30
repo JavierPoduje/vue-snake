@@ -6,28 +6,28 @@ const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
   const currentHead = snake.body[0]
   if (snake?.direction === Direction.Up) {
     const row = currentHead?.row - 1
-    if (row < 0 || row >= game?.gridSize) {
+    if (row >= 0) {
       return { row: game?.gridSize - 1, col: currentHead?.col }
     } else {
       return { row, col: currentHead?.col }
     }
   } else if (snake?.direction === Direction.Right) {
     const col = currentHead?.col + 1
-    if (col < 0 || col >= game?.gridSize) {
+    if (col < game?.gridSize) {
       return { row: currentHead?.row, col }
     } else {
       return { row: currentHead?.row, col: 0 }
     }
   } else if (snake?.direction === Direction.Down) {
     const row = currentHead?.row + 1
-    if (row < 0 || row >= game?.gridSize) {
+    if (row < game?.gridSize) {
       return { row: 0, col: currentHead?.col }
     } else {
       return { row, col: currentHead?.col }
     }
   } else if (snake?.direction === Direction.Left) {
     const col = currentHead?.col - 1
-    if (col < 0 || col >= game?.gridSize) {
+    if (col >= 0) {
       return { row: currentHead?.row, col }
     } else {
       return { row: currentHead?.row, col: game?.gridSize - 1 }
@@ -40,14 +40,16 @@ const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
 export const getRandomApple = (snake: Snake, gridSize: number): Cell => {
   const snakeSet = new Set(snake?.body?.map(stringifyCell))
 
-  const apple = {
+  let apple = {
     row: Math.floor(Math.random() * gridSize),
     col: Math.floor(Math.random() * gridSize)
   }
 
   while (snakeSet?.has(apple)) {
-    row = Math.floor(Math.random() * gridSize)
-    col = Math.floor(Math.random() * gridSize)
+    apple = {
+      row: Math.floor(Math.random() * gridSize),
+      col: Math.floor(Math.random() * gridSize)
+    }
   }
 
   return apple
@@ -55,7 +57,7 @@ export const getRandomApple = (snake: Snake, gridSize: number): Cell => {
 
 export const isClashedSnake = (snake: Snake): boolean => {
   const snakeSet = new Set(snake?.body?.slice(1)?.map(stringifyCell))
-  return snakeSet?.has(stringifyCell(snake?.body[0]))
+  return snake?.body ? snakeSet?.has(stringifyCell(snake?.body[0])) : false
 }
 
 export const snakeAteApple = (head: Cell, apple: Cell): boolean => {

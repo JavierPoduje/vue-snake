@@ -38,14 +38,18 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
 
       // 2. check if the snake died
       if (isClashedSnake(nextSnake)) {
+        console.log('is clashed snake')
         return this.finishGame()
       }
 
-      // 3. check if the snake ate the apple
-      const head = nextSnake[0]
-      if (snakeAteApple(head, this.apple)) {
-        this.addCellToSnake(head, nextSnake)
+      // 3. if snake ate apple, add a cell to the snake and generate a new apple
+      if (snakeAteApple(nextSnake[0], this.apple)) {
+        this.addCellToSnake(this.apple, nextSnake)
         this.apple = getRandomApple(this.snake.body, this.game.gridSize)
+      }
+      // 4. else, just move the snake
+      else {
+        this.snake.body = nextSnake
       }
     },
     // Todo: not implemented

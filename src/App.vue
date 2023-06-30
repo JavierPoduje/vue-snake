@@ -6,8 +6,25 @@
 </template>
 
 <script setup lang="ts">
+  import { watchEffect } from 'vue'
+  import useGameStore from './stores/game.ts'
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
+  import { GameState } from './models.ts'
+
+  const gameStore = useGameStore()
+
+  const localTick = () => {
+    gameStore.tick()
+    setTimeout(localTick, 500)
+  }
+
+  // after the user clicks start, start the game loop
+  watchEffect(() => {
+    if (gameStore.game.state === GameState.Running) {
+      localTick()
+    }
+  })
 </script>
 
 <style scoped lang="scss">
