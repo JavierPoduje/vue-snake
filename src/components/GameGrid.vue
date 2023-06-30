@@ -8,7 +8,13 @@
       >
         <div
           class="cell"
-          :class="snakeSet.has(`${colIdx}-${rowIdx}`) && 'cell--snake'"
+          :class="
+            snakeSet?.has(`${colIdx}-${rowIdx}`)
+              ? 'cell--snake'
+              : isApple(colIdx, rowIdx)
+              ? 'cell--apple'
+              : ''
+          "
         />
       </div>
     </div>
@@ -16,18 +22,25 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+  import { ref, computed } from 'vue'
   import useGameStore from '../stores/game.ts'
 
-  const gameStore = useGameStore()
-  const snakeSet = computed(
-    () => new Set(gameStore?.snake?.map(({ col, row }) => `${col}-${row}`))
+  // definitions
+  const { apple, snake } = useGameStore()
+  const numberOfColumns = 25
+  const grid = ref(
+    new Array(numberOfColumns)
+      .fill()
+      .map(() => new Array(numberOfColumns).fill().map((_, colIdx) => colIdx))
   )
 
-  const numberOfColumns = 25
-  const grid = new Array(numberOfColumns)
-    .fill()
-    .map(() => new Array(numberOfColumns).fill().map((_, colIdx) => colIdx))
+  // functions
+  const isApple = (col, row) => apple?.col === col && apple?.row === row
+
+  // computed
+  const snakeSet = computed(
+    () => new Set(snake?.body?.map(({ col, row }) => `${col}-${row}`))
+  )
 </script>
 
 <style scoped lang="scss">
@@ -57,6 +70,9 @@
 
       &--snake {
         background-color: map-get($colors, red);
+      }
+      &--apple {
+        background-color: map-get($colors, purple);
       }
     }
   }

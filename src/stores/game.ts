@@ -1,35 +1,61 @@
-import { GameState, type Cell, type GameStoreType } from '@/models'
+import { GameState, type Cell, type GameStoreType, Direction } from '@/models'
+import { isClashedSnake, snakeAteApple, getNextSnake } from './helpers'
 import { defineStore } from 'pinia'
 
 const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
   state: () => ({
-    snake: [
-      { row: 0, col: 0 },
-      { row: 1, col: 1 }
-    ],
+    snake: {
+      direction: Direction.Left,
+      body: [
+        { row: 10, col: 10 },
+        { row: 11, col: 10 }
+      ]
+    },
+    apple: { row: 3, col: 3 },
     game: {
+      gridSize: 25,
       state: GameState.Pending
     }
   }),
   getters: {
     snakeSize(): number {
-      return this?.snake?.length
+      return this?.snake?.body?.length
     },
     eatenApples(): number {
-      return this?.snake?.length - 2
+      return this?.snake?.body?.length - 2
     }
   },
   actions: {
-    addCellToSnake(cell: Cell) {
-      this?.snake?.push(cell)
+    addCellToSnake(cell: Cell, snake: Snake): Snake {
+      this.snake.body = [cell, ...snake]
     },
+    changeDirection(direction: Direction) {
+      this.snake.direction = direction
+    },
+    tick() {
+      // 1. calculate the next position of the snake
+      const nextSnake = getNextSnake(this.game, this.snake)
+
+      // 2. check if the snake died
+      if (isClashedSnake(nextSnake)) {
+        return this.finishGame()
+      }
+
+      // 3. check if the snake ate the apple
+      const head = nextSnake[0]
+      if (snakeAteApple(head, this.apple)) {
+        this.addCellToSnake(head, nextSnake)
+        this.apple = getRandomApple(this.snake.body, this.game.gridSize)
+      }
+    },
+    // Todo: not implemented
     startGame() {
-      console.log('starting the game!')
       this.game.state = GameState.Running
     },
+    // Todo: not implemented
     finishGame() {
       this.game.state = GameState.Over
-    },
+    }
   }
 })
 

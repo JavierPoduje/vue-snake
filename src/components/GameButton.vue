@@ -19,7 +19,8 @@
   @import '../assets/main.scss';
 
   .button {
-    background-color: map-get($colors, green);
+    background-color: map-get($colors, bg4);
+    color: map-get($colors, fg1);
     cursor: pointer;
     min-height: 36px;
     outline: none;

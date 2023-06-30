@@ -9,9 +9,26 @@ export interface Cell {
   col: number
 }
 
-export type GameStoreType = {
-  snake: Cell[]
-  game: {
+export enum Direction {
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right'
+}
+
+export interface Snake {
+  direction: Direction
+  body: Cell[]
+}
+
+export interface Game {
     state: GameState
-  }
+    gridSize: number
+
+}
+
+export type GameStoreType = {
+  snake: Snake
+  apple: Cell
+  game: Game
 }

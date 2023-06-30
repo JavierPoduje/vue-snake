@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <GameButton text="Start" :on-click="gameStore?.startGame" />
+    <GameButton text="Step" :on-click="gameStore?.tick" />
   </nav>
 </template>
 
@@ -15,9 +15,9 @@
   @import '../assets/main.scss';
 
   .navbar {
-    background-color: map-get($colors, gray);
+    padding: 3rem;
+    background-color: map-get($colors, bg_s);
     width: 100%;
-    height: 50px;
     display: flex;
   }
 </style>
