@@ -1,6 +1,7 @@
 <template>
   <nav class="navbar">
-    <GameButton text="Step" :on-click="gameStore?.tick" />
+    <GameButton text="Start" :on-click="gameStore?.startGame" />
+    <GameButton text="Pause" :on-click="gameStore?.pauseGame" />
   </nav>
 </template>
 

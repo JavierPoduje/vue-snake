@@ -38,7 +38,6 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
 
       // 2. check if the snake died
       if (isClashedSnake(nextSnake)) {
-        console.log('is clashed snake')
         return this.finishGame()
       }
 
@@ -52,9 +51,11 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
         this.snake.body = nextSnake
       }
     },
-    // Todo: not implemented
     startGame() {
       this.game.state = GameState.Running
+    },
+    pauseGame() {
+      this.game.state = GameState.Pending
     },
     // Todo: not implemented
     finishGame() {
