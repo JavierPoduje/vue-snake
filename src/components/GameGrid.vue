@@ -52,9 +52,9 @@
 
   .grid {
     display: grid;
-    height: 550px; // change if the number_of_columns changes
     grid-template-columns: repeat($number_of_columns, 1fr);
     grid-template-rows: repeat($number_of_columns, 1fr);
+    height: 550px; // change if the number_of_columns changes
 
     &__cell_container {
       margin: 0;
