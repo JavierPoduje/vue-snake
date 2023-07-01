@@ -19,7 +19,8 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     apple: { row: 10, col: 6 },
     game: {
       gridSize: 25,
-      state: GameState.Pending
+      state: GameState.Pending,
+      tickInterval: 400
     }
   }),
   getters: {
@@ -37,7 +38,15 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
       this.game.state = GameState.Over
     },
     changeDirection(direction: Direction) {
-      this.snake.direction = direction
+      const isOppositeDirection = {
+        [Direction.Up]: Direction.Down,
+        [Direction.Right]: Direction.Left,
+        [Direction.Down]: Direction.Up,
+        [Direction.Left]: Direction.Right
+      }
+      if (isOppositeDirection[direction] !== this.snake.direction) {
+        this.snake.direction = direction
+      }
     },
     tick() {
       // get the next body of the snake
@@ -52,6 +61,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
         // if snake ate apple, add a cell to the snake and generate a new apple
         this.snake.body.push(this.apple)
         this.apple = getNextApple(this.snake, this.game.gridSize)
+        this.game.tickInterval -= 10
       } else {
         // otherwise, just move the snake
         this.snake.body = nextSnakeBody

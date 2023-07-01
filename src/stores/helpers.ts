@@ -1,6 +1,5 @@
 import { Direction, type Cell, type Snake, type Game } from '@/models'
-
-const stringifyCell = ({ row, col }: Cell): string => `${row}-${col}`
+import { stringifyCell } from '@/utils'
 
 const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
   const currentHead = snake.body[0]
@@ -52,9 +51,9 @@ export const getNextApple = (snake: Snake, gridSize: number): Cell => {
   return apple
 }
 
-export const isClashedSnake = (snake: Snake['body']): boolean => {
-  const snakeSet = new Set(snake?.body?.slice(1)?.map(stringifyCell))
-  return snake?.body ? snakeSet?.has(stringifyCell(snake?.body[0])) : false
+export const isClashedSnake = (snakeBody: Snake['body']): boolean => {
+  const snakeSet = new Set(snakeBody?.slice(1)?.map(stringifyCell))
+  return snakeBody ? snakeSet?.has(stringifyCell(snakeBody[0])) : false
 }
 
 export const snakeAteApple = (head: Cell, apple: Cell): boolean => {

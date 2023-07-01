@@ -4,16 +4,16 @@ export enum GameState {
   Running = 'Running'
 }
 
-export interface Cell {
-  row: number
-  col: number
-}
-
 export enum Direction {
   Up = 'Up',
   Down = 'Down',
   Left = 'Left',
   Right = 'Right'
+}
+
+export interface Cell {
+  row: number
+  col: number
 }
 
 export interface Snake {
@@ -22,9 +22,9 @@ export interface Snake {
 }
 
 export interface Game {
-    state: GameState
-    gridSize: number
-
+  state: GameState
+  gridSize: number
+  tickInterval: number
 }
 
 export type GameStoreType = {

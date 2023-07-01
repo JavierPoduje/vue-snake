@@ -1,15 +1,15 @@
 <template>
   <section class="grid">
-    <div v-for="(col, colIdx) in grid" :key="colIdx" class="grid__col">
+    <div v-for="(col, colIdx) in props.grid" :key="colIdx" class="grid__col">
       <div
         v-for="(row, rowIdx) in col"
-        :key="`${rowIdx}-${colIdx}`"
+        :key="stringifyCell({ row: rowIdx, col: colIdx })"
         class="grid__cell_container"
       >
         <div
           class="cell"
           :class="
-            snakeSet?.has(`${colIdx}-${rowIdx}`)
+            snakeSet?.has(stringifyCell({ row: rowIdx, col: colIdx }))
               ? 'cell--snake'
               : props?.apple?.col === colIdx && props?.apple?.row === rowIdx
               ? 'cell--apple'
@@ -22,8 +22,9 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue'
+  import { computed } from 'vue'
   import useGameStore from '../stores/game.ts'
+  import { stringifyCell } from '../utils.ts'
 
   // definitions
   const { snake } = useGameStore()
@@ -31,20 +32,15 @@
     apple: {
       type: Object,
       required: true
+    },
+    grid: {
+      type: Array,
+      required: true
     }
   })
 
-  const numberOfColumns = 25
-  const grid = ref(
-    new Array(numberOfColumns)
-      .fill()
-      .map(() => new Array(numberOfColumns).fill().map((_, colIdx) => colIdx))
-  )
-
   // computed
-  const snakeSet = computed(
-    () => new Set(snake?.body?.map(({ col, row }) => `${col}-${row}`))
-  )
+  const snakeSet = computed(() => new Set(snake?.body?.map(stringifyCell)))
 </script>
 
 <style scoped lang="scss">
@@ -69,15 +65,16 @@
     }
 
     .cell {
-      background-color: map-get($colors, green);
+      background-color: map-get($colors, bg3);
       height: $cell-size;
       width: $cell-size;
+      border-radius: $radius;
 
       &--snake {
-        background-color: map-get($colors, red);
+        background-color: map-get($colors, aqua);
       }
       &--apple {
-        background-color: map-get($colors, purple);
+        background-color: map-get($colors, red);
       }
     }
   }

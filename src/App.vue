@@ -1,7 +1,7 @@
 <template>
   <main class="main">
     <GameNavbar />
-    <GameGrid :apple="gameStore?.apple" />
+    <GameGrid :apple="gameStore?.apple" :grid="grid" />
   </main>
 </template>
 
@@ -20,7 +20,7 @@
 
     // if the game change its state, stop the loop
     if (gameStore.game.state === GameState.Running) {
-      setTimeout(loop, 500)
+      setTimeout(loop, gameStore.game.tickInterval)
     } else {
       looping.value = false
     }
@@ -62,7 +62,16 @@
     window.addEventListener('keydown', onKeyDown)
   })
 
-  // after the user clicks start, start the game loop
+  // refs
+  const grid = ref(
+    new Array(gameStore.game.gridSize)
+      .fill()
+      .map(() =>
+        new Array(gameStore.game.gridSize).fill().map((_, colIdx) => colIdx)
+      )
+  )
+
+  // start the game loop
   watchEffect(() => {
     if (gameStore.game.state === GameState.Running && !looping.value) {
       looping.value = true
