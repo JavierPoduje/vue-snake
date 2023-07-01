@@ -11,7 +11,7 @@
           :class="
             snakeSet?.has(`${colIdx}-${rowIdx}`)
               ? 'cell--snake'
-              : isApple(colIdx, rowIdx)
+              : props?.apple?.col === colIdx && props?.apple?.row === rowIdx
               ? 'cell--apple'
               : ''
           "
@@ -26,16 +26,20 @@
   import useGameStore from '../stores/game.ts'
 
   // definitions
-  const { apple, snake } = useGameStore()
+  const { snake } = useGameStore()
+  const props = defineProps({
+    apple: {
+      type: Object,
+      required: true
+    }
+  })
+
   const numberOfColumns = 25
   const grid = ref(
     new Array(numberOfColumns)
       .fill()
       .map(() => new Array(numberOfColumns).fill().map((_, colIdx) => colIdx))
   )
-
-  // functions
-  const isApple = (col, row) => apple?.col === col && apple?.row === row
 
   // computed
   const snakeSet = computed(

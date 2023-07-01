@@ -1,7 +1,7 @@
 <template>
   <main class="main">
     <GameNavbar />
-    <GameGrid />
+    <GameGrid :apple="gameStore?.apple" />
   </main>
 </template>
 

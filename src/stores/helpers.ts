@@ -34,7 +34,7 @@ const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
   }
 }
 
-export const getRandomApple = (snake: Snake, gridSize: number): Cell => {
+export const getNextApple = (snake: Snake, gridSize: number): Cell => {
   const snakeSet = new Set(snake?.body?.map(stringifyCell))
 
   let apple = {
@@ -52,7 +52,7 @@ export const getRandomApple = (snake: Snake, gridSize: number): Cell => {
   return apple
 }
 
-export const isClashedSnake = (snake: Snake): boolean => {
+export const isClashedSnake = (snake: Snake['body']): boolean => {
   const snakeSet = new Set(snake?.body?.slice(1)?.map(stringifyCell))
   return snake?.body ? snakeSet?.has(stringifyCell(snake?.body[0])) : false
 }

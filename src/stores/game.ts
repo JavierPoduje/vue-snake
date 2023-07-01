@@ -1,11 +1,10 @@
+import { GameState, type GameStoreType, Direction } from '../models'
 import {
-  GameState,
-  type Cell,
-  type GameStoreType,
-  Direction,
-  type Snake
-} from '../models'
-import { isClashedSnake, snakeAteApple, getNextSnakeBody } from './helpers'
+  isClashedSnake,
+  snakeAteApple,
+  getNextSnakeBody,
+  getNextApple
+} from './helpers'
 import { defineStore } from 'pinia'
 
 const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
@@ -17,7 +16,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
         { row: 11, col: 10 }
       ]
     },
-    apple: { row: 3, col: 3 },
+    apple: { row: 10, col: 6 },
     game: {
       gridSize: 25,
       state: GameState.Pending
@@ -37,9 +36,6 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     finishGame() {
       this.game.state = GameState.Over
     },
-    addCellToSnake(cell: Cell, snake: Snake) {
-      this.snake.body = [cell, ...snake.body]
-    },
     changeDirection(direction: Direction) {
       this.snake.direction = direction
     },
@@ -49,13 +45,13 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
 
       if (isClashedSnake(nextSnakeBody)) {
         // if the snake died, finish the game
-        return this.finishGame()
+        this.game.state = GameState.Over
       }
 
       if (snakeAteApple(nextSnakeBody[0], this.apple)) {
         // if snake ate apple, add a cell to the snake and generate a new apple
-        this.addCellToSnake(this.apple, nextSnakeBody)
-        this.apple = getRandomApple(this.snake.body, this.game.gridSize)
+        this.snake.body.push(this.apple)
+        this.apple = getNextApple(this.snake, this.game.gridSize)
       } else {
         // otherwise, just move the snake
         this.snake.body = nextSnakeBody
