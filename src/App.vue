@@ -6,11 +6,11 @@
 </template>
 
 <script setup lang="ts">
-  import { watchEffect, ref } from 'vue'
+  import { watchEffect, ref, onMounted } from 'vue'
   import useGameStore from './stores/game.ts'
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
-  import { GameState } from './models.ts'
+  import { GameState, Direction } from './models.ts'
 
   const gameStore = useGameStore()
   const looping = ref(false)
@@ -25,6 +25,42 @@
       looping.value = false
     }
   }
+
+  const onKeyDown = (e) => {
+    const key = e?.key?.toLowerCase()
+    switch (key) {
+      case 'w':
+      case 'arrowup':
+        gameStore.changeDirection(Direction.Up)
+        break
+      case 'd':
+      case 'arrowright':
+        gameStore.changeDirection(Direction.Right)
+        break
+      case 's':
+      case 'arrowdown':
+        gameStore.changeDirection(Direction.Down)
+        break
+      case 'a':
+      case 'arrowleft':
+        gameStore.changeDirection(Direction.Left)
+        break
+      case ' ':
+        if (gameStore.game.state === GameState.Running) {
+          gameStore.pauseGame()
+        } else {
+          gameStore.startGame()
+        }
+        break
+      default:
+        break
+    }
+  }
+
+  // on mounted, handle keyboard events
+  onMounted(() => {
+    window.addEventListener('keydown', onKeyDown)
+  })
 
   // after the user clicks start, start the game loop
   watchEffect(() => {

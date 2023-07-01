@@ -5,24 +5,28 @@ const stringifyCell = ({ row, col }: Cell): string => `${row}-${col}`
 const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
   const currentHead = snake.body[0]
   if (snake?.direction === Direction.Up) {
+    const row = currentHead?.row - 1
     return {
       col: currentHead?.col,
-      row: row >= 0 ? currentHead?.row - 1 : game?.gridSize - 1
+      row: row >= 0 ? row : game?.gridSize - 1
     }
   } else if (snake?.direction === Direction.Right) {
+    const col = currentHead?.col + 1
     return {
       row: currentHead?.row,
-      col: col < game?.gridSize ? currentHead?.col + 1 : 0
+      col: col < game?.gridSize ? col : 0
     }
   } else if (snake?.direction === Direction.Down) {
+    const row = currentHead?.row + 1
     return {
       col: currentHead?.col,
-      row: row < game?.gridSize ? 0 : currentHead?.row + 1
+      row: row < game?.gridSize ? 0 : row
     }
   } else if (snake?.direction === Direction.Left) {
+    const col = currentHead?.col - 1
     return {
       row: currentHead?.row,
-      col: col >= 0 ? currentHead?.col - 1 : game?.gridSize - 1
+      col: col >= 0 ? col : game?.gridSize - 1
     }
   } else {
     throw new Error('Invalid direction')
@@ -37,7 +41,7 @@ export const getRandomApple = (snake: Snake, gridSize: number): Cell => {
     col: Math.floor(Math.random() * gridSize)
   }
 
-  while (snakeSet?.has(apple)) {
+  while (snakeSet?.has(stringifyCell(apple))) {
     apple = {
       row: Math.floor(Math.random() * gridSize),
       col: Math.floor(Math.random() * gridSize)
@@ -56,6 +60,7 @@ export const snakeAteApple = (head: Cell, apple: Cell): boolean => {
   return head?.row === apple?.row && head?.col === apple?.col
 }
 
-export const getNextSnake = (game: Game, snake: Snake): Snake => {
-  return [getNextSnakeHead(game, snake), ...snake.body.slice(0, -1)]
+export const getNextSnakeBody = (game: Game, snake: Snake): Snake['body'] => {
+  const nextHead = getNextSnakeHead(game, snake)
+  return [nextHead, ...snake.body.slice(0, -1)]
 }
