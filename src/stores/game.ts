@@ -20,7 +20,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     game: {
       gridSize: 25,
       state: GameState.Pending,
-      tickInterval: 400
+      tickInterval: 300
     }
   }),
   getters: {

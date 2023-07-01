@@ -1,9 +1,18 @@
 <template>
   <nav class="navbar">
     <section class="navbar__stats">
-      <p class="statsText">Eaten apples: {{ gameStore.eatenApples }}</p>
+      <div class="stat">
+        <img
+          :src="appleSvg"
+          class="apple"
+          :class="animateApple && 'apple--animated'"
+        />
+        {{ gameStore.eatenApples }}
+      </div>
+      <p class="statsText"></p>
       <p class="statsText">State: {{ gameStore.game.state }}</p>
     </section>
+
     <section class="navbar__buttons">
       <GameButton
         :disabled="gameStore?.game?.state === GameState.Running"
@@ -20,11 +29,25 @@
 </template>
 
 <script setup>
-  import { GameState } from '../models.ts'
+  import { watch, ref, computed } from 'vue'
+  import appleSvg from '../assets/svg/apple.svg'
   import useGameStore from '../stores/game.ts'
   import GameButton from './GameButton.vue'
+  import { GameState } from '../models.ts'
 
   const gameStore = useGameStore()
+  const currentEatenApples = ref(gameStore.eatenApples)
+  const animateApple = computed(
+    () => currentEatenApples.value !== gameStore.eatenApples
+  )
+
+  watch(gameStore.snake, () => {
+    if (currentEatenApples.value !== gameStore.eatenApples) {
+      setTimeout(() => {
+        currentEatenApples.value = gameStore.eatenApples
+      }, 300)
+    }
+  })
 </script>
 
 <style scoped lang="scss">
@@ -42,9 +65,20 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
 
       .statsText {
         font-weight: bold;
+      }
+
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 80%;
+        height: 100%;
+        font-weight: bold;
+        font-size: 1.5rem;
       }
     }
 
@@ -53,6 +87,37 @@
       flex-direction: column;
       justify-content: flex-end;
       gap: 1rem;
+    }
+  }
+
+  .apple {
+    width: 2rem;
+    height: 2rem;
+    transform: rotate(-25deg);
+
+    &--animated {
+      animation: shake 0.3s;
+    }
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(-25deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(-26deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(-27deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(-26deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(-25deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-24deg);
     }
   }
 </style>
