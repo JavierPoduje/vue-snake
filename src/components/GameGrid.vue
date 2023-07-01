@@ -1,8 +1,8 @@
 <template>
   <section class="grid">
-    <div v-for="(row, rowIdx) in grid" :key="rowIdx" class="grid__col">
+    <div v-for="(col, colIdx) in grid" :key="colIdx" class="grid__col">
       <div
-        v-for="(col, colIdx) in row"
+        v-for="(row, rowIdx) in col"
         :key="`${rowIdx}-${colIdx}`"
         class="grid__cell_container"
       >

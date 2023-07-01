@@ -4,29 +4,30 @@ const stringifyCell = ({ row, col }: Cell): string => `${row}-${col}`
 
 const getNextSnakeHead = (game: Game, snake: Snake): Cell => {
   const currentHead = snake.body[0]
-  if (snake?.direction === Direction.Up) {
-    const row = currentHead?.row - 1
+  const direction = snake?.direction
+  if (direction === Direction.Up) {
+    const nextRow = currentHead.row - 1
     return {
-      col: currentHead?.col,
-      row: row >= 0 ? row : game?.gridSize - 1
+      row: nextRow < 0 ? game.gridSize - 1 : nextRow,
+      col: currentHead?.col
     }
-  } else if (snake?.direction === Direction.Right) {
-    const col = currentHead?.col + 1
+  } else if (direction === Direction.Right) {
+    const nextCol = currentHead.col + 1
     return {
       row: currentHead?.row,
-      col: col < game?.gridSize ? col : 0
+      col: nextCol >= game.gridSize ? 0 : nextCol
     }
-  } else if (snake?.direction === Direction.Down) {
-    const row = currentHead?.row + 1
+  } else if (direction === Direction.Down) {
+    const nextRow = currentHead.row + 1
     return {
-      col: currentHead?.col,
-      row: row < game?.gridSize ? 0 : row
+      row: nextRow >= game.gridSize ? 0 : nextRow,
+      col: currentHead?.col
     }
-  } else if (snake?.direction === Direction.Left) {
-    const col = currentHead?.col - 1
+  } else if (direction === Direction.Left) {
+    const nextCol = currentHead.col - 1
     return {
       row: currentHead?.row,
-      col: col >= 0 ? col : game?.gridSize - 1
+      col: nextCol < 0 ? game.gridSize - 1 : nextCol
     }
   } else {
     throw new Error('Invalid direction')
