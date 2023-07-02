@@ -3,32 +3,7 @@
     <GameNavbar />
     <section class="main__game">
       <GameGrid :apple="gameStore?.apple" :grid="grid" />
-      <section class="instructions">
-        <!-- Change state -->
-        <p class="instructions__text">Space</p>
-        <p class="instructions__text">:</p>
-        <p class="instructions__text">Start / Pause</p>
-
-        <!-- Move up -->
-        <p class="instructions__text">W or Up</p>
-        <p class="instructions__text">:</p>
-        <p class="instructions__text">Move up</p>
-
-        <!-- Move left -->
-        <p class="instructions__text">A or Left</p>
-        <p class="instructions__text">:</p>
-        <p class="instructions__text">Move left</p>
-
-        <!-- Move right -->
-        <p class="instructions__text">D or Right</p>
-        <p class="instructions__text">:</p>
-        <p class="instructions__text">Move right</p>
-
-        <!-- Move down -->
-        <p class="instructions__text">S or Down</p>
-        <p class="instructions__text">:</p>
-        <p class="instructions__text">Move down</p>
-      </section>
+      <GameInstructions />
     </section>
   </main>
 </template>
@@ -38,6 +13,7 @@
   import useGameStore from './stores/game.ts'
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
+  import GameInstructions from './components/GameInstructions.vue'
   import { GameState, Direction } from './models.ts'
 
   const gameStore = useGameStore()
@@ -123,16 +99,6 @@
       gap: 5rem;
       align-items: center;
       justify-content: center;
-
-      .instructions {
-        display: grid;
-        grid-template-columns: 3fr 1fr 3fr;
-
-        &__text {
-          font-size: 1.2rem;
-          font-weight: bold;
-        }
-      }
     }
   }
 </style>
