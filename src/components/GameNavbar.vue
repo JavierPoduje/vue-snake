@@ -9,8 +9,7 @@
         />
         {{ gameStore.eatenApples }}
       </div>
-      <p class="statsText"></p>
-      <p class="statsText">State: {{ gameStore.game.state }}</p>
+      <p class="statsText">: {{ gameStore.game.state }}</p>
     </section>
 
     <section class="navbar__buttons">
@@ -24,6 +23,11 @@
         text="Pause"
         :on-click="gameStore?.pauseGame"
       />
+    </section>
+
+    <section class="navbar__stats">
+      <p class="statsText">Highest score: {{ gameStore.game.highestScore }}</p>
+      <p class="statsText">Last score: {{ gameStore.game.lastScore }}</p>
     </section>
   </nav>
 </template>
