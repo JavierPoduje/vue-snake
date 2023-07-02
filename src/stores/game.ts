@@ -5,7 +5,10 @@ import {
   getNextSnakeBody,
   getNextApple
 } from './helpers'
+import useLocalStorage from '../composables/useLocalStorage'
 import { defineStore } from 'pinia'
+
+const { setItem, getItem } = useLocalStorage()
 
 const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
   state: () => ({
@@ -39,16 +42,14 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     startGame() {
       this.game.state = GameState.Running
     },
-    restartGame() {
-      this.game.state = GameState.Running
-      this.snake = {
-        direction: Direction.Left,
-        body: [
-          { row: 10, col: 10 },
-          { row: 11, col: 10 }
-        ]
-      }
-      this.apple = { row: 10, col: 6 }
+    reset() {
+      this.snake.direction = Direction.Left
+      this.snake.body = [
+        { row: 10, col: 10 },
+        { row: 11, col: 10 }
+      ]
+      this.game.tickInterval = 270
+      this.apple = getNextApple(this.snake, this.game.gridSize)
     },
     pauseGame() {
       this.game.state = GameState.Pending
@@ -74,13 +75,23 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
       if (isClashedSnake(nextSnakeBody)) {
         // if the snake died, finish the game
         this.game.state = GameState.Over
+
+        if (this.game.state === GameState.Over) {
+          const eatenApples = this.snake.body.length - 2
+          setItem('lastScore', eatenApples.toString())
+          this.game.lastScore = eatenApples
+          if (eatenApples > parseInt(getItem('highestScore') || '0')) {
+            setItem('highestScore', eatenApples.toString())
+            this.game.highestScore = eatenApples
+          }
+        }
       }
 
       if (snakeAteApple(nextSnakeBody[0], this.apple)) {
         // if snake ate apple, add a cell to the snake and generate a new apple
         this.snake.body.unshift(this.apple)
         this.apple = getNextApple(this.snake, this.game.gridSize)
-        this.game.tickInterval -= 7
+        this.game.tickInterval *= 0.95
       } else {
         // otherwise, just move the snake
         this.snake.body = nextSnakeBody

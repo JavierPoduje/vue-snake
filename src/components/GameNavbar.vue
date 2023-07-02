@@ -9,14 +9,17 @@
         />
         {{ gameStore.eatenApples }}
       </div>
-      <p class="statsText">: {{ gameStore.game.state }}</p>
     </section>
 
     <section class="navbar__buttons">
       <GameButton
         :disabled="gameStore?.game?.state === GameState.Running"
         :text="gameStore?.game?.state === GameState.Over ? 'Restart' : 'Start'"
-        :on-click="gameStore?.startGame"
+        :on-click="
+          gameStore?.game?.state === GameState.Over
+            ? reset
+            : gameStore?.startGame
+        "
       />
       <GameButton
         :disabled="gameStore?.game?.state !== GameState.Running"
@@ -26,8 +29,8 @@
     </section>
 
     <section class="navbar__stats">
-      <p class="statsText">Highest score: {{ gameStore.game.highestScore }}</p>
-      <p class="statsText">Last score: {{ gameStore.game.lastScore }}</p>
+      <p class="statsText">Highest score: {{ highestScore }}</p>
+      <p class="statsText">Last score: {{ lastScore }}</p>
     </section>
   </nav>
 </template>
@@ -41,9 +44,22 @@
 
   const gameStore = useGameStore()
   const currentEatenApples = ref(gameStore.eatenApples)
+  const highestScore = ref(gameStore?.game?.highestScore)
+  const lastScore = ref(gameStore?.game?.lastScore)
+
   const animateApple = computed(
     () => currentEatenApples.value !== gameStore.eatenApples
   )
+
+  const reset = () => {
+    gameStore.reset()
+    gameStore.startGame()
+  }
+
+  watch(gameStore.game, () => {
+    highestScore.value = gameStore?.game?.highestScore
+    lastScore.value = gameStore?.game?.lastScore
+  })
 
   watch(gameStore.snake, () => {
     if (currentEatenApples.value !== gameStore.eatenApples) {

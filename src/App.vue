@@ -9,16 +9,16 @@
 </template>
 
 <script setup lang="ts">
-  import { watchEffect, ref, onMounted } from 'vue'
+  import { watchEffect, ref, onMounted, watch } from 'vue'
   import useLocalStorage from './composables/useLocalStorage'
-  import useGameStore from './stores/game.ts'
+  import useGameStore from './stores/game'
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
   import GameInstructions from './components/GameInstructions.vue'
   import { GameState, Direction } from './models.ts'
 
   const gameStore = useGameStore()
-  const { setItem, getItem } = useLocalStorage()
+  const { getItem } = useLocalStorage()
   const looping = ref(false)
 
   const loop = () => {
@@ -54,6 +54,9 @@
       case ' ':
         if (gameStore.game.state === GameState.Running) {
           gameStore.pauseGame()
+        } else if (gameStore.game.state === GameState.Over) {
+          gameStore.reset()
+          gameStore.startGame()
         } else {
           gameStore.startGame()
         }
@@ -66,8 +69,8 @@
   // on mounted, handle keyboard events
   onMounted(() => {
     window.addEventListener('keydown', onKeyDown)
-    gameStore.setHighestScore(parseInt(getItem('highestScore') ?? 0))
-    gameStore.setLastScore(parseInt(getItem('lastScore') ?? 0))
+    gameStore.setHighestScore(parseInt(getItem('highestScore') ?? '0'))
+    gameStore.setLastScore(parseInt(getItem('lastScore') ?? '0'))
   })
 
   // refs
@@ -79,14 +82,13 @@
       )
   )
 
-  // watch for the game state to change and save the highest highestScore
-  watchEffect(() => {
-    if (gameStore.game.state === GameState.GameOver) {
-      setItem('lastScore', gameStore.eatenApples)
-      if (gameStore.eatenApples > parseInt(gameStore.highestScore)) {
-        setItem('highestScore', gameStore.lastScore)
-      }
-    }
+  watch(gameStore.game.state, () => {
+    console.log("gameStore.game.state changed");
+    grid.value = new Array(gameStore.game.gridSize)
+      .fill()
+      .map(() =>
+        new Array(gameStore.game.gridSize).fill().map((_, colIdx) => colIdx)
+      )
   })
 
   // start the game loop
