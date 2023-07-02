@@ -78,8 +78,7 @@
         background-color: map-get($colors, aqua);
       }
       &--snake_head {
-        background-color: map-get($colors, aqua);
-        transform: scale(1.2);
+        background-color: map-get($colors, yellow);
       }
       &--apple {
         background-color: map-get($colors, red);

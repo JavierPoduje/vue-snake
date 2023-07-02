@@ -20,7 +20,9 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     game: {
       gridSize: 25,
       state: GameState.Pending,
-      tickInterval: 270
+      tickInterval: 270,
+      highestScore: 0,
+      lastScore: 0
     }
   }),
   getters: {
@@ -28,6 +30,12 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     eatenApples: ({ snake }: GameStoreType): number => snake?.body?.length - 2
   },
   actions: {
+    setHighestScore(score: number) {
+      this.game.highestScore = score
+    },
+    setLastScore(score: number) {
+      this.game.lastScore = score
+    },
     startGame() {
       this.game.state = GameState.Running
     },

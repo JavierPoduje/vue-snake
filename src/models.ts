@@ -25,6 +25,8 @@ export interface Game {
   state: GameState
   gridSize: number
   tickInterval: number
+  highestScore: number
+  lastScore: number
 }
 
 export type GameStoreType = {

@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
   import { watchEffect, ref, onMounted } from 'vue'
+  import useLocalStorage from './composables/useLocalStorage'
   import useGameStore from './stores/game.ts'
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
@@ -17,6 +18,7 @@
   import { GameState, Direction } from './models.ts'
 
   const gameStore = useGameStore()
+  const { setItem, getItem } = useLocalStorage()
   const looping = ref(false)
 
   const loop = () => {
@@ -64,6 +66,8 @@
   // on mounted, handle keyboard events
   onMounted(() => {
     window.addEventListener('keydown', onKeyDown)
+    gameStore.setHighestScore(parseInt(getItem('highestScore') ?? 0))
+    gameStore.setLastScore(parseInt(getItem('lastScore') ?? 0))
   })
 
   // refs
@@ -74,6 +78,16 @@
         new Array(gameStore.game.gridSize).fill().map((_, colIdx) => colIdx)
       )
   )
+
+  // watch for the game state to change and save the highest highestScore
+  watchEffect(() => {
+    if (gameStore.game.state === GameState.GameOver) {
+      setItem('lastScore', gameStore.eatenApples)
+      if (gameStore.eatenApples > parseInt(gameStore.highestScore)) {
+        setItem('highestScore', gameStore.lastScore)
+      }
+    }
+  })
 
   // start the game loop
   watchEffect(() => {
