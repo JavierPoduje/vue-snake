@@ -31,25 +31,26 @@
 
   .button {
     background-color: map-get($colors, bg1);
-    color: map-get($colors, fg1);
-    font-weight: bold;
-    cursor: pointer;
-    min-height: 36px;
-    outline: none;
-    border: none;
-    padding: 0.5rem 1rem;
     border-radius: $radius;
+    border: none;
+    color: map-get($colors, fg1);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 46px;
+    outline: none;
+    padding: 0.5rem 1rem;
     transition: all 0.03s ease-in-out;
 
     &:hover:not(&--disabled) {
-      color: map-get($colors, fg);
       background-color: map-get($colors, bg2);
+      color: map-get($colors, fg);
     }
 
     &--disabled {
-      cursor: default;
-      color: map-get($colors, fg3);
       background-color: map-get($colors, bg4);
+      color: map-get($colors, fg3);
+      cursor: default;
     }
   }
 </style>

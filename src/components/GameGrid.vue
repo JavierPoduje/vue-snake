@@ -6,22 +6,13 @@
         :key="stringifyCell({ row: rowIdx, col: colIdx })"
         class="grid__cell_container"
       >
-        <div
-          class="cell"
-          :class="
-            snakeSet?.has(stringifyCell({ row: rowIdx, col: colIdx }))
-              ? 'cell--snake'
-              : props?.apple?.col === colIdx && props?.apple?.row === rowIdx
-              ? 'cell--apple'
-              : ''
-          "
-        />
+        <div class="cell" :class="cellStyles({ row: rowIdx, col: colIdx })" />
       </div>
     </div>
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { computed } from 'vue'
   import useGameStore from '../stores/game.ts'
   import { stringifyCell } from '../utils.ts'
@@ -41,6 +32,19 @@
 
   // computed
   const snakeSet = computed(() => new Set(snake?.body?.map(stringifyCell)))
+
+  const cellStyles = ({ row, col }) => {
+    if (snakeSet?.value?.has(stringifyCell({ row, col }))) {
+      const head = snake?.body[0]
+      if (head?.row === row && head?.col === col) {
+        return 'cell--snake_head'
+      }
+      return 'cell--snake'
+    } else if (props?.apple?.col === col && props?.apple?.row === row) {
+      return 'cell--apple'
+    }
+    return ''
+  }
 </script>
 
 <style scoped lang="scss">
@@ -72,6 +76,10 @@
 
       &--snake {
         background-color: map-get($colors, aqua);
+      }
+      &--snake_head {
+        background-color: map-get($colors, aqua);
+        transform: scale(1.2);
       }
       &--apple {
         background-color: map-get($colors, red);

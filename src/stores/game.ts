@@ -20,7 +20,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     game: {
       gridSize: 25,
       state: GameState.Pending,
-      tickInterval: 300
+      tickInterval: 270
     }
   }),
   getters: {
@@ -30,6 +30,17 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
   actions: {
     startGame() {
       this.game.state = GameState.Running
+    },
+    restartGame() {
+      this.game.state = GameState.Running
+      this.snake = {
+        direction: Direction.Left,
+        body: [
+          { row: 10, col: 10 },
+          { row: 11, col: 10 }
+        ]
+      }
+      this.apple = { row: 10, col: 6 }
     },
     pauseGame() {
       this.game.state = GameState.Pending
@@ -59,9 +70,9 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
 
       if (snakeAteApple(nextSnakeBody[0], this.apple)) {
         // if snake ate apple, add a cell to the snake and generate a new apple
-        this.snake.body.push(this.apple)
+        this.snake.body.unshift(this.apple)
         this.apple = getNextApple(this.snake, this.game.gridSize)
-        this.game.tickInterval -= 10
+        this.game.tickInterval -= 7
       } else {
         // otherwise, just move the snake
         this.snake.body = nextSnakeBody
