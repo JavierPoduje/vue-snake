@@ -5,6 +5,22 @@
       <GameGrid :apple="gameStore?.apple" :grid="grid" />
       <GameInstructions />
     </section>
+    <section class="main__buttons">
+      <GameButton
+        :disabled="gameStore?.game?.state === GameState.Running"
+        :text="gameStore?.game?.state === GameState.Over ? 'Restart' : 'Start'"
+        :on-click="
+          gameStore?.game?.state === GameState.Over
+            ? reset
+            : gameStore?.startGame
+        "
+      />
+      <GameButton
+        :disabled="gameStore?.game?.state !== GameState.Running"
+        text="Pause"
+        :on-click="gameStore?.pauseGame"
+      />
+    </section>
   </main>
 </template>
 
@@ -15,11 +31,17 @@
   import GameNavbar from './components/GameNavbar.vue'
   import GameGrid from './components/GameGrid.vue'
   import GameInstructions from './components/GameInstructions.vue'
-  import { GameState, Direction } from './models.ts'
+  import GameButton from './components/GameButton.vue'
+  import { GameState, Direction } from './models'
 
   const gameStore = useGameStore()
   const { getItem } = useLocalStorage()
   const looping = ref(false)
+
+  const reset = () => {
+    gameStore.reset()
+    gameStore.startGame()
+  }
 
   const loop = () => {
     gameStore.tick()
@@ -32,7 +54,7 @@
     }
   }
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: KeyboardEvent) => {
     const key = e?.key?.toLowerCase()
     switch (key) {
       case 'w':
@@ -73,23 +95,23 @@
     gameStore.setLastScore(parseInt(getItem('lastScore') ?? '0'))
   })
 
-  // refs
-  const grid = ref(
+  const buildGrid = () =>
     new Array(gameStore.game.gridSize)
-      .fill()
+      .fill(null)
       .map(() =>
-        new Array(gameStore.game.gridSize).fill().map((_, colIdx) => colIdx)
+        new Array(gameStore.game.gridSize).fill(null).map((_, colIdx) => colIdx)
       )
-  )
 
-  watch(gameStore.game.state, () => {
-    console.log("gameStore.game.state changed");
-    grid.value = new Array(gameStore.game.gridSize)
-      .fill()
-      .map(() =>
-        new Array(gameStore.game.gridSize).fill().map((_, colIdx) => colIdx)
-      )
-  })
+  // refs
+  const grid = ref(buildGrid())
+
+  watch(
+    () => gameStore.game.state,
+    () => {
+      console.log('gameStore.game.state changed')
+      grid.value = buildGrid()
+    }
+  )
 
   // start the game loop
   watchEffect(() => {
@@ -105,7 +127,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 3rem;
     height: 100%;
     justify-content: center;
     width: 100%;
@@ -115,6 +137,11 @@
       gap: 5rem;
       align-items: center;
       justify-content: center;
+    }
+
+    &__buttons {
+      display: flex;
+      gap: 1rem;
     }
   }
 </style>

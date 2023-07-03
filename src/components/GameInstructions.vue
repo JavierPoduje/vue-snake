@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, type Ref } from 'vue'
   import spaceSvg from '../assets/svg/space.svg'
   import arrowDownSvg from '../assets/svg/arrow-down.svg'
 
@@ -99,7 +99,7 @@
   const keyAPressed = ref(false)
   const spacePressed = ref(false)
 
-  const refByKey = {
+  const refByKey: Record<string, Ref<boolean>> = {
     arrowup: arrowUpPressed,
     arrowright: arrowRightPressed,
     arrowdown: arrowDownPressed,
@@ -111,14 +111,14 @@
     ' ': spacePressed
   }
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     const key = event.key.toLowerCase()
     if (refByKey[key]) {
       refByKey[key].value = true
     }
   }
 
-  const handleKeyUp = (event) => {
+  const handleKeyUp = (event: KeyboardEvent) => {
     const key = event.key.toLowerCase()
     if (refByKey[key]) {
       refByKey[key].value = false

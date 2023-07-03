@@ -9,14 +9,16 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { type PropType } from 'vue'
+
   const props = defineProps({
     text: {
       type: String,
       required: true
     },
     onClick: {
-      type: Function,
+      type: Function as PropType<(event: MouseEvent) => void>,
       required: true
     },
     disabled: {

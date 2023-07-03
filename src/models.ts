@@ -34,3 +34,8 @@ export type GameStoreType = {
   apple: Cell
   game: Game
 }
+
+export type GameStoreGettersType = {
+  snakeSize: (state: GameStoreType) => number
+  eatenApples: (state: GameStoreType) => number
+}

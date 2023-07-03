@@ -1,4 +1,9 @@
-import { GameState, type GameStoreType, Direction } from '../models'
+import {
+  GameState,
+  type GameStoreType,
+  Direction,
+  type GameStoreGettersType
+} from '../models'
 import {
   isClashedSnake,
   snakeAteApple,
@@ -6,11 +11,15 @@ import {
   getNextApple
 } from './helpers'
 import useLocalStorage from '../composables/useLocalStorage'
-import { defineStore } from 'pinia'
+import { defineStore, type _GettersTree } from 'pinia'
 
 const { setItem, getItem } = useLocalStorage()
 
-const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
+const useGameStore = defineStore<
+  'gameStore',
+  GameStoreType,
+  _GettersTree<GameStoreType> & GameStoreGettersType
+>('gameStore', {
   state: () => ({
     snake: {
       direction: Direction.Left,

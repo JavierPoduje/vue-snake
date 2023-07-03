@@ -11,23 +11,6 @@
       </div>
     </section>
 
-    <section class="navbar__buttons">
-      <GameButton
-        :disabled="gameStore?.game?.state === GameState.Running"
-        :text="gameStore?.game?.state === GameState.Over ? 'Restart' : 'Start'"
-        :on-click="
-          gameStore?.game?.state === GameState.Over
-            ? reset
-            : gameStore?.startGame
-        "
-      />
-      <GameButton
-        :disabled="gameStore?.game?.state !== GameState.Running"
-        text="Pause"
-        :on-click="gameStore?.pauseGame"
-      />
-    </section>
-
     <section class="navbar__stats">
       <p class="statsText">Highest score: {{ highestScore }}</p>
       <p class="statsText">Last score: {{ lastScore }}</p>
@@ -35,12 +18,10 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { watch, ref, computed } from 'vue'
   import appleSvg from '../assets/svg/apple.svg'
-  import useGameStore from '../stores/game.ts'
-  import GameButton from './GameButton.vue'
-  import { GameState } from '../models.ts'
+  import useGameStore from '../stores/game'
 
   const gameStore = useGameStore()
   const currentEatenApples = ref(gameStore.eatenApples)
@@ -50,11 +31,6 @@
   const animateApple = computed(
     () => currentEatenApples.value !== gameStore.eatenApples
   )
-
-  const reset = () => {
-    gameStore.reset()
-    gameStore.startGame()
-  }
 
   watch(gameStore.game, () => {
     highestScore.value = gameStore?.game?.highestScore
@@ -102,13 +78,6 @@
         font-weight: bold;
         font-size: 1.5rem;
       }
-    }
-
-    &__buttons {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 1rem;
     }
   }
 

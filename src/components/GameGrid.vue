@@ -14,8 +14,9 @@
 
 <script setup lang="ts">
   import { computed } from 'vue'
-  import useGameStore from '../stores/game.ts'
-  import { stringifyCell } from '../utils.ts'
+  import useGameStore from '../stores/game'
+  import { stringifyCell } from '../utils'
+  import { type Cell } from '../models'
 
   // definitions
   const { snake } = useGameStore()
@@ -33,7 +34,7 @@
   // computed
   const snakeSet = computed(() => new Set(snake?.body?.map(stringifyCell)))
 
-  const cellStyles = ({ row, col }) => {
+  const cellStyles = ({ row, col }: Cell): string => {
     if (snakeSet?.value?.has(stringifyCell({ row, col }))) {
       const head = snake?.body[0]
       if (head?.row === row && head?.col === col) {
