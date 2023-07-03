@@ -109,7 +109,6 @@
   watch(
     () => gameStore.game.state,
     () => {
-      console.log('gameStore.game.state changed')
       grid.value = buildGrid()
     }
   )
