@@ -21,7 +21,7 @@ const useGameStore = defineStore<'gameStore', GameStoreType>('gameStore', {
     },
     apple: { row: 10, col: 6 },
     game: {
-      gridSize: 25,
+      gridSize: 20,
       state: GameState.Pending,
       tickInterval: 270,
       highestScore: 0,

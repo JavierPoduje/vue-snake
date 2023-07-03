@@ -50,7 +50,7 @@
 <style scoped lang="scss">
   @import '../assets/main.scss';
 
-  $number_of_columns: 25;
+  $number_of_columns: 20;
   $cell_size: 20px;
   $gap_between_cells: 1px;
 
@@ -58,7 +58,7 @@
     display: grid;
     grid-template-columns: repeat($number_of_columns, 1fr);
     grid-template-rows: repeat($number_of_columns, 1fr);
-    height: 550px; // change if the number_of_columns changes
+    height: 440px; // change if the number_of_columns changes
 
     &__cell_container {
       margin: 0;

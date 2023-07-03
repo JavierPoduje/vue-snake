@@ -2,7 +2,10 @@
   <section class="instructions">
     <!-- Change state -->
     <div class="instruction">
-      <div class="keys__key keys__key--space">
+      <div
+        class="keys__key keys__key--space"
+        :class="spacePressed && 'keys__key--pressed'"
+      >
         <img :src="spaceSvg" alt="space" class="space" />
       </div>
       <p class="instruction__text">:</p>
@@ -10,28 +13,40 @@
     </div>
 
     <section class="keys">
-      <div class="keys__key keys__key--arrow_up">
+      <div
+        class="keys__key keys__key--arrow_up"
+        :class="arrowUpPressed && 'keys__key--pressed'"
+      >
         <img
           :src="arrowDownSvg"
           alt="up arrow"
           class="svg_arrow svg_arrow--up"
         />
       </div>
-      <div class="keys__key keys__key--arrow_left">
+      <div
+        class="keys__key keys__key--arrow_left"
+        :class="arrowLeftPressed && 'keys__key--pressed'"
+      >
         <img
           :src="arrowDownSvg"
           alt="left arrow"
           class="svg_arrow svg_arrow--left"
         />
       </div>
-      <div class="keys__key keys__key--arrow_down">
+      <div
+        class="keys__key keys__key--arrow_down"
+        :class="arrowDownPressed && 'keys__key--pressed'"
+      >
         <img
           :src="arrowDownSvg"
           alt="down arrow"
           class="svg_arrow svg_arrow--down"
         />
       </div>
-      <div class="keys__key keys__key--arrow_right">
+      <div
+        class="keys__key keys__key--arrow_right"
+        :class="arrowRightPressed && 'keys__key--pressed'"
+      >
         <img
           :src="arrowDownSvg"
           alt="right arrow"
@@ -41,16 +56,28 @@
     </section>
 
     <section class="keys">
-      <div class="keys__key keys__key--arrow_up">
+      <div
+        class="keys__key keys__key--arrow_up"
+        :class="keyWPressed && 'keys__key--pressed'"
+      >
         <p alt="key W">W</p>
       </div>
-      <div class="keys__key keys__key--arrow_left">
+      <div
+        class="keys__key keys__key--arrow_left"
+        :class="keyAPressed && 'keys__key--pressed'"
+      >
         <p alt="key A">A</p>
       </div>
-      <div class="keys__key keys__key--arrow_down">
+      <div
+        class="keys__key keys__key--arrow_down"
+        :class="keySPressed && 'keys__key--pressed'"
+      >
         <p alt="key S">S</p>
       </div>
-      <div class="keys__key keys__key--arrow_right">
+      <div
+        class="keys__key keys__key--arrow_right"
+        :class="keyDPressed && 'keys__key--pressed'"
+      >
         <p alt="key D">D</p>
       </div>
     </section>
@@ -58,8 +85,50 @@
 </template>
 
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
   import spaceSvg from '../assets/svg/space.svg'
   import arrowDownSvg from '../assets/svg/arrow-down.svg'
+
+  const arrowUpPressed = ref(false)
+  const arrowRightPressed = ref(false)
+  const arrowDownPressed = ref(false)
+  const arrowLeftPressed = ref(false)
+  const keyWPressed = ref(false)
+  const keyDPressed = ref(false)
+  const keySPressed = ref(false)
+  const keyAPressed = ref(false)
+  const spacePressed = ref(false)
+
+  const refByKey = {
+    arrowup: arrowUpPressed,
+    arrowright: arrowRightPressed,
+    arrowdown: arrowDownPressed,
+    arrowleft: arrowLeftPressed,
+    w: keyWPressed,
+    d: keyDPressed,
+    s: keySPressed,
+    a: keyAPressed,
+    ' ': spacePressed
+  }
+
+  const handleKeyDown = (event) => {
+    const key = event.key.toLowerCase()
+    if (refByKey[key]) {
+      refByKey[key].value = true
+    }
+  }
+
+  const handleKeyUp = (event) => {
+    const key = event.key.toLowerCase()
+    if (refByKey[key]) {
+      refByKey[key].value = false
+    }
+  }
+
+  onMounted(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keyup', handleKeyUp)
+  })
 </script>
 
 <style scoped lang="scss">
@@ -72,7 +141,7 @@
     gap: 3rem;
     justify-content: center;
     width: 100%;
-    margin-top: 2rem;
+    height: 100%;
   }
 
   .instruction {
@@ -159,8 +228,7 @@
         font-weight: bold;
       }
 
-      &:hover,
-      &:focus {
+      &--pressed {
         box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 4px 0 #c0c0c0,
           0 2px 35px rgba(#444, 0.3), 2px 2px 4px rgba(#444, 0.25),
           -2px 2px 4px rgba(#444, 0.25), 0 7px 4px rgba(#444, 0.1);
