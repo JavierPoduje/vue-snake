@@ -74,18 +74,19 @@
   @import '../assets/main.scss';
 
   .navbar {
-    padding: 2rem 8rem;
+    padding: 2rem;
     background-color: map-get($colors, bg_s);
     width: 100%;
     display: flex;
     justify-content: space-between;
     border-radius: $radius;
+    max-width: 790.52px;
 
     &__stats {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-end;
 
       .statsText {
         font-weight: bold;
@@ -95,6 +96,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
         width: 80%;
         height: 100%;
         font-weight: bold;

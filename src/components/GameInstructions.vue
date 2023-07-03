@@ -199,13 +199,14 @@
       transition: box-shadow 0.3s ease, transform 0.15s ease;
       background: -webkit-linear-gradient(
         top,
-        #f9f9f9 0%,
-        #d2d2d2 80%,
-        #c0c0c0 100%
+        map-get($colors, fg2) 0%,
+        map-get($colors, fg3) 80%,
+        map-get($colors, fg4) 100%
       );
-      box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 6px 0 #c0c0c0,
-        0 8px 17px rgba(#444, 0.4), 2px 1px 4px rgba(#444, 0.25),
-        -2px 1px 4px rgba(#444, 0.25), 0 9px 16px rgba(#444, 0.1);
+      box-shadow: 0 0 1px map-get($colors, bg4), 0 1px 0 map-get($colors, fg),
+        0 6px 0 map-get($colors, gray), 0 8px 17px rgba(#444, 0.4),
+        2px 1px 4px rgba(#444, 0.25), -2px 1px 4px rgba(#444, 0.25),
+        0 9px 16px rgba(#444, 0.1);
 
       &--arrow_up {
         grid-area: up;
@@ -229,9 +230,10 @@
       }
 
       &--pressed {
-        box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 4px 0 #c0c0c0,
-          0 2px 35px rgba(#444, 0.3), 2px 2px 4px rgba(#444, 0.25),
-          -2px 2px 4px rgba(#444, 0.25), 0 7px 4px rgba(#444, 0.1);
+        box-shadow: 0 0 1px map-get($colors, bg4), 0 1px 0 map-get($colors, fg),
+          0 4px 0 map-get($colors, gray), 0 2px 35px rgba(#444, 0.3),
+          2px 2px 4px rgba(#444, 0.25), -2px 2px 4px rgba(#444, 0.25),
+          0 7px 4px rgba(#444, 0.1);
         transform: translateY(2px);
       }
     }
