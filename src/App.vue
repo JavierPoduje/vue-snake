@@ -36,6 +36,7 @@
 
   const gameStore = useGameStore()
   const { getItem } = useLocalStorage()
+
   const looping = ref(false)
 
   const reset = () => {

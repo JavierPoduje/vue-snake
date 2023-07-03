@@ -64,3 +64,16 @@ export const getNextSnakeBody = (game: Game, snake: Snake): Snake['body'] => {
   const nextHead = getNextSnakeHead(game, snake)
   return [nextHead, ...snake.body.slice(0, -1)]
 }
+
+export const snakeBodyDirection = ({ body }: Snake): Direction => {
+  const head = body[0]
+  const neck = body[1]
+
+  if (head?.row === neck?.row) {
+    return head?.col > neck?.col ? Direction.Right : Direction.Left
+  } else if (head?.col === neck?.col) {
+    return head?.row > neck?.row ? Direction.Down : Direction.Up
+  } else {
+    throw new Error('Invalid snake direction')
+  }
+}

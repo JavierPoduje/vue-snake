@@ -8,7 +8,8 @@ import {
   isClashedSnake,
   snakeAteApple,
   getNextSnakeBody,
-  getNextApple
+  getNextApple,
+  snakeBodyDirection
 } from './helpers'
 import useLocalStorage from '../composables/useLocalStorage'
 import { defineStore, type _GettersTree } from 'pinia'
@@ -73,7 +74,10 @@ const useGameStore = defineStore<
         [Direction.Down]: Direction.Up,
         [Direction.Left]: Direction.Right
       }
-      if (isOppositeDirection[direction] !== this.snake.direction) {
+      if (
+        isOppositeDirection[direction] !== this.snake.direction &&
+        snakeBodyDirection(this.snake) !== isOppositeDirection[direction]
+      ) {
         this.snake.direction = direction
       }
     },
